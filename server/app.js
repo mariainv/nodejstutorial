@@ -1,13 +1,24 @@
-/* var express=require('express');
+
+var express=require('express');
+
+const path=require('path');//cosi' node riconosce i file html
+
 var app=express(); 
 app.get('/',function(rec,res){
-    res.send("<h1>Hello world</h1>");
+    res.sendFile(path.join(__dirname,'views/index.html'));
+
+});
+//ora proviamo a cambiare la route dopo lo /
+app.get('/pagina1',function(rec,res){
+    res.send("<h1>Ciao il mondo e' bello</h1>");
 
 });
 app.listen(3000,function(){
     console.log('server attivo sulla porta 3000');//messaggio che verra visualizzato sul terminale
-}); */
-const http=require('http');//incude tutti gli script inclusi in http
+}); 
+
+//CODICE PROF
+/* const http=require('http');//incude tutti gli script inclusi in http
 const fs=require('fs'); //richiamo i moduli che mi permettono di interfacciarmi al file system
 
 //a questo punto uso http per creare un server
@@ -32,4 +43,4 @@ s.on('request',function(req,res)
         console.log('Connessione attiva');
         
 
-    });
+    }); */
