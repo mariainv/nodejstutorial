@@ -6,3 +6,11 @@ body {
 a {
   color: #00B7FF;
 }
+
+.titolo{
+  color:gold;
+}
+
+#id_name{
+  color:green;
+}
