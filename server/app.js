@@ -1,46 +1,41 @@
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 
-var express=require('express');
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
 
-const path=require('path');//cosi' node riconosce i file html
+var app = express();
 
-var app=express(); 
-app.get('/',function(rec,res){
-    res.sendFile(path.join(__dirname,'views/index.html'));
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
 });
-//ora proviamo a cambiare la route dopo lo /
-app.get('/pagina1',function(rec,res){
-    res.send("<h1>Ciao il mondo e' bello</h1>");
 
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
-app.listen(3000,function(){
-    console.log('server attivo sulla porta 3000');//messaggio che verra visualizzato sul terminale
-}); 
 
-//CODICE PROF
-/* const http=require('http');//incude tutti gli script inclusi in http
-const fs=require('fs'); //richiamo i moduli che mi permettono di interfacciarmi al file system
-
-//a questo punto uso http per creare un server
-const port=8383;
-var s=http.createServer();
-s.listen(port);//porta sulla quale e' in ascolto il server
-console.log('Server attivo su',port);
-
-//il server deve anche reagire a chiamate che arrivano dal client. on gestisce la possibilita di richiamare degli eventi
-s.on('request',function(req,res)
-    {
-        let url=req.url;
-        console.log(url);
-        fs.readFile('./ciao.html',function(err,data)
-        {
-            if(err) throw err;
-            res.writeHead(200,{'content-Type': 'text/html'});
-            res.end(data);
-
-
-        });
-        console.log('Connessione attiva');
-        
-
-    }); */
+module.exports = app;
